@@ -15,7 +15,7 @@ pipeline {
                 }
             }
         }
-	stage('cobrtr'){
+	stage('cobertura'){
 		steps{
 			bat 'mvn cobertura:cobertura -Dcobertura.report.format=xml'
 		}
@@ -25,36 +25,6 @@ pipeline {
 			}
 		}
 	}
-	stage('jvdoc'){
-		steps{
-			bat 'mvn javadoc:javadoc'
-		}
-		post{
-			success {
-				step([$class: 'JavadocArchiver', javadocDir: 'target/site/apidocs', keepAll: false])
-			}
-		}
-	}
-	stage('package'){
-		steps{
-			bat 'mvn package'
-		}
-		
-	}
-	    stage('lekher'){
-		    steps{
-			    nexusPublisher nexusInstanceId: 'nexus',
-				    nexusRepositoryId: 'mine',
-				    packages: [[$class: 'MavenPackage',
-						mavenAssetList: [[classifier: '',
-								  extension: 'jar',
-								  filePath: 'target/15ShadesQcm-0.0.1-SNAPSHOT.jar']],
-						mavenCoordinate: [artifactId: '15ShadesQcm',
-								  groupId: 'com.fboot',
-								  packaging: 'jar',
-								  version: '2.2']
-					       ]]
-		    }
-	    }
+	
      }
 }
